@@ -19,6 +19,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             text-align: center;
+            white-space: nowrap;
         }
 
         th {
@@ -55,7 +56,7 @@
 
 <body>
 
-    <div class="card" style="width:900px">
+    <div class="card" style="width:auto">
         <h2>Reporte</h2>
 
         <table id="tabla">
@@ -65,73 +66,32 @@
                 <th>Unidad</th>
                 <th>Lote</th>
                 <th>Cantidad Total</th>
-                <th>Ingreso</th>
+                <th>Fecha Ingreso</th>
                 <th>Caducidad</th>
+                <th>Usuario</th>
+                <th>Fecha Registro</th>
             </tr>
         </table>
 
+        <!-- BOTONES ORIGINALES -->
         <div class="botones">
             <button onclick="volver()">Volver</button>
             <button class="borrar" onclick="borrarInventario()">Borrar Inventario</button>
         </div>
 
-        <!-- Boton para Retorno menu principal -->
-
-        <button class="menu-top" onclick="location.href='interface.html'">
+        <!-- MENÚ PRINCIPAL -->
+        <button class="menu-top" onclick="location.href='menuprincipal.html'">
             Menú principal
         </button>
-
     </div>
 
     <button class="descargar" onclick="descargarExcel()">⬇</button>
 
-    <script>
-        function cargarDatos() {
-            let datos = JSON.parse(localStorage.getItem("inventario")) || [];
-            let tabla = document.getElementById("tabla");
 
-            datos.forEach(p => {
-                let fila = tabla.insertRow();
-                fila.insertCell(0).innerText = p.codigo;
-                fila.insertCell(1).innerText = p.nombre;
-                fila.insertCell(2).innerText = p.unidad;
-                fila.insertCell(3).innerText = p.lote || "Sin lote";
-                fila.insertCell(4).innerText = p.cantidad;
-                fila.insertCell(5).innerText = p.fecha;
-                fila.insertCell(6).innerText = p.caducidad;
-            });
-        }
-
-        function borrarInventario() {
-            if (confirm("¿Seguro que desea borrar todo el inventario?")) {
-                localStorage.removeItem("inventario");
-                location.reload();
-            }
-        }
-
-        function volver() {
-            window.location.href = "inventario.html";
-        }
-
-        function descargarExcel() {
-            let datos = JSON.parse(localStorage.getItem("inventario")) || [];
-
-            let hoja = XLSX.utils.json_to_sheet(datos.map(p => ({
-                Codigo: p.codigo,
-                Nombre: p.nombre,
-                Unidad: p.unidad,
-                Lote: p.lote || "Sin lote",
-                Cantidad: p.cantidad,
-                Ingreso: p.fecha,
-                Caducidad: p.caducidad
-            })));
-
-            let libro = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(libro, hoja, "Reporte");
-            XLSX.writeFile(libro, "reporte.xlsx");
-        }
-
-        cargarDatos();
+    </script>
+    <script src="reporte.js">
+    </script>
+    <script src="usuario-left.js">
     </script>
 
 </body>

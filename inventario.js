@@ -1,3 +1,11 @@
+/* ===== VALIDAR SESIÓN ===== */
+let usuario = localStorage.getItem("usuarioActivo");
+if (!usuario) {
+    window.location.href = "login.html";
+}
+
+/* ===== BUSCAR CÓDIGO ===== */
+
 function buscarCodigo() {
     let codigo = document.getElementById("codigo").value.trim();
     let nombre = document.getElementById("nombre");
@@ -19,14 +27,21 @@ function buscarCodigo() {
     }
 }
 
+/* ===============================
+   GUARDAR PRODUCTO
+================================ */
 function guardarProducto() {
     let codigo = document.getElementById("codigo").value.trim();
     let nombre = document.getElementById("nombre").value.trim();
     let unidad = document.getElementById("unidad").value;
-    let lote = document.getElementById("lote").value.trim();
+    let lote = document.getElementById("lote").value.trim() || "Sin lote";
     let cantidad = Number(document.getElementById("cantidad").value);
     let fecha = document.getElementById("fecha").value;
     let caducidad = document.getElementById("caducidad").value;
+
+    let usuario = localStorage.getItem("usuarioActivo");
+    let fechaRegistro = new Date().toLocaleDateString("es-CL");
+
 
     if (!codigo || !nombre || !unidad || cantidad <= 0 || !fecha || !caducidad) {
         alert("Complete todos los campos obligatorios.");
@@ -35,55 +50,55 @@ function guardarProducto() {
 
     let lista = JSON.parse(localStorage.getItem("inventario")) || [];
 
-    // 🔥 VALIDACIÓN CLAVE: MISMO CÓDIGO + MISMO LOTE
+    /* 🔑 MISMO CÓDIGO + MISMO LOTE */
     let encontrado = lista.find(p =>
-        p.codigo === codigo && (p.lote || "") === (lote || "")
+        p.codigo === codigo && p.lote === lote
     );
 
     if (encontrado) {
         encontrado.cantidad += cantidad;
+        encontrado.usuario = usuario;
+        encontrado.fechaRegistro = fechaRegistro;
     } else {
         lista.push({
             codigo,
             nombre,
             unidad,
-            lote: lote || "Sin lote",
+            lote,
             cantidad,
             fecha,
-            caducidad
+            caducidad,
+            usuario,
+            fechaRegistro
         });
     }
 
     localStorage.setItem("inventario", JSON.stringify(lista));
 
-    let ventana = window.open("", "_blank", "width=420,height=420");
-    ventana.document.write(`
-        <html>
-        <head>
-            <title>Producto Registrado</title>
-            <style>
-                body{font-family:Arial;background:#1f4037;padding:20px;}
-                .box{background:white;padding:20px;border-radius:10px;}
-                h2{text-align:center;color:#1f4037;}
-            </style>
-        </head>
-        <body>
-            <div class="box">
-                <h2>Producto Registrado</h2>
-                <p><b>Código:</b> ${codigo}</p>
-                <p><b>Nombre:</b> ${nombre}</p>
-                <p><b>Unidad:</b> ${unidad}</p>
-                <p><b>Lote:</b> ${lote || "Sin lote"}</p>
-                <p><b>Cantidad Agregada:</b> ${cantidad}</p>
-                <p><b>Ingreso:</b> ${fecha}</p>
-                <p><b>Caducidad:</b> ${caducidad}</p>
-            </div>
-        </body>
-        </html>
-    `);
+    /* ===============================
+       ENVIAR DATOS AL POPUP
+    ================================ */
+    localStorage.setItem("ultimoIngreso", JSON.stringify({
+        codigo,
+        nombre,
+        unidad,
+        lote,
+        cantidad,
+        fechaIngreso: fecha,
+        fechaRegistro,
+        caducidad,
+        usuario
+    }));
 
+    window.open("popup.html", "_blank", "width=450,height=460");
+
+    /* ===============================
+       LIMPIAR FORMULARIO
+    ================================ */
     document.querySelectorAll("input").forEach(i => i.value = "");
     document.getElementById("unidad").value = "";
     document.getElementById("nombre").disabled = false;
     document.getElementById("unidad").disabled = false;
 }
+
+

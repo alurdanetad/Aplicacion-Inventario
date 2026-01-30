@@ -32,7 +32,6 @@ function accionPrincipal() {
 
         alert("Usuario registrado correctamente. Ahora puede iniciar sesión.");
 
-        // Volver a modo login
         modo = "login";
         document.getElementById("titulo").innerText = "Iniciar Sesión";
         document.querySelector(".botones button").innerText = "Iniciar";
@@ -46,16 +45,16 @@ function accionPrincipal() {
     );
 
     if (valido) {
-        alert("Bienvenido");
-        window.location.href = "interface.html";
-    }
+        // ✅ GUARDAR USUARIO CONECTADO
+        localStorage.setItem("usuarioActivo", correo);
 
-    else {
+        window.location.href = "menuprincipal.html";
+    } else {
         alert("Correo o contraseña incorrectos");
     }
 }
 
-/* CANCELAR → vuelve a la página principal */
+/* CANCELAR */
 function cancelar() {
-    window.location.href = "index.html"; // ⬅️ cambia aquí si tu página principal tiene otro nombre
+    window.location.href = "index.html";
 }

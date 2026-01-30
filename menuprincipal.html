@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Principal</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="logo.svg/Logo.png" alt="Logo" class="navbar-logo">
+        </div>
+
+        <div class="navbar-right">
+            <div class="user-avatar">A</div>
+            <span class="user-email">alurdanetad@gmail.com</span>
+        </div>
+    </div>
+
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <button onclick="location.href='inventario.html'">📦 Inventario</button>
+        <button onclick="location.href='reporte.html'">📊 Reporte</button>
+        <button onclick="location.href='orden_compra.html'">🧾 Orden de Compra</button>
+
+        <button class="salir" onclick="location.href='index.html'">🚪 Salir</button>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+
+        <h2>Dashboard</h2>
+        <p>Resumen de actividades recientes</p>
+
+        <!-- CARD: PRODUCTOS RECIENTES -->
+        <div class="dashboard-card">
+            <h3>🕒 Productos ingresados recientemente</h3>
+
+            <table id="tabla-recientes">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JS inserta aquí -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="menuprincipal.js"></script>
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>
