@@ -57,5 +57,5 @@ function accionPrincipal() {
 
 /* CANCELAR → vuelve a la página principal */
 function cancelar() {
-    window.location.href = "index html"; // ⬅️ cambia aquí si tu página principal tiene otro nombre
+    window.location.href = "index.html"; // ⬅️ cambia aquí si tu página principal tiene otro nombre
 }
