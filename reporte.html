@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte</title>
+
+    <link rel="stylesheet" href="estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th {
+            background: #1f4037;
+            color: white;
+        }
+
+        .botones {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .borrar {
+            background: #c0392b;
+            color: white;
+        }
+
+        .descargar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1f4037;
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card" style="width:900px">
+        <h2>Reporte</h2>
+
+        <table id="tabla">
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Unidad</th>
+                <th>Lote</th>
+                <th>Cantidad Total</th>
+                <th>Ingreso</th>
+                <th>Caducidad</th>
+            </tr>
+        </table>
+
+        <div class="botones">
+            <button onclick="volver()">Volver</button>
+            <button class="borrar" onclick="borrarInventario()">Borrar Inventario</button>
+        </div>
+
+        <!-- Boton para Retorno menu principal -->
+
+        <button class="menu-top" onclick="location.href='interface.html'">
+            Menú principal
+        </button>
+
+    </div>
+
+    <button class="descargar" onclick="descargarExcel()">⬇</button>
+
+    <script>
+        function cargarDatos() {
+            let datos = JSON.parse(localStorage.getItem("inventario")) || [];
+            let tabla = document.getElementById("tabla");
+
+            datos.forEach(p => {
+                let fila = tabla.insertRow();
+                fila.insertCell(0).innerText = p.codigo;
+                fila.insertCell(1).innerText = p.nombre;
+                fila.insertCell(2).innerText = p.unidad;
+                fila.insertCell(3).innerText = p.lote || "Sin lote";
+                fila.insertCell(4).innerText = p.cantidad;
+                fila.insertCell(5).innerText = p.fecha;
+                fila.insertCell(6).innerText = p.caducidad;
+            });
+        }
+
+        function borrarInventario() {
+            if (confirm("¿Seguro que desea borrar todo el inventario?")) {
+                localStorage.removeItem("inventario");
+                location.reload();
+            }
+        }
+
+        function volver() {
+            window.location.href = "inventario.html";
+        }
+
+        function descargarExcel() {
+            let datos = JSON.parse(localStorage.getItem("inventario")) || [];
+
+            let hoja = XLSX.utils.json_to_sheet(datos.map(p => ({
+                Codigo: p.codigo,
+                Nombre: p.nombre,
+                Unidad: p.unidad,
+                Lote: p.lote || "Sin lote",
+                Cantidad: p.cantidad,
+                Ingreso: p.fecha,
+                Caducidad: p.caducidad
+            })));
+
+            let libro = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(libro, hoja, "Reporte");
+            XLSX.writeFile(libro, "reporte.xlsx");
+        }
+
+        cargarDatos();
+    </script>
+
+</body>
+
+</html>
