@@ -15,13 +15,15 @@ function cargarDatos() {
 
         fila.insertCell(0).innerText = p.codigo;
         fila.insertCell(1).innerText = p.nombre;
-        fila.insertCell(2).innerText = p.unidad;
-        fila.insertCell(3).innerText = p.lote || "Sin lote";
-        fila.insertCell(4).innerText = p.cantidad;
-        fila.insertCell(5).innerText = p.fecha;
-        fila.insertCell(6).innerText = p.caducidad;
-        fila.insertCell(7).innerText = p.usuario || "—";
-        fila.insertCell(8).innerText = p.fechaRegistro || "—";
+        fila.insertCell(2).innerText = p.cantidad;
+        fila.insertCell(3).innerText = p.unidad;
+        fila.insertCell(4).innerText = p.centro;
+        fila.insertCell(5).innerText = p.almacen;
+        fila.insertCell(6).innerText = p.lote || "Sin lote";
+        fila.insertCell(7).innerText = p.fecha;
+        fila.insertCell(8).innerText = p.caducidad;
+        fila.insertCell(9).innerText = p.usuario || "—";
+        fila.insertCell(10).innerText = p.fechaRegistro || "—";
     });
 }
 
@@ -51,9 +53,11 @@ function descargarExcel() {
     let hoja = XLSX.utils.json_to_sheet(datos.map(p => ({
         Codigo: p.codigo,
         Nombre: p.nombre,
-        Unidad: p.unidad,
-        Lote: p.lote || "Sin lote",
         Cantidad: p.cantidad,
+        Unidad: p.unidad,
+        Centro: p.centro,
+        almacen: p.centro,
+        Lote: p.lote || "Sin lote",
         Ingreso: p.fecha,
         Caducidad: p.caducidad,
         Usuario: p.usuario || "",
